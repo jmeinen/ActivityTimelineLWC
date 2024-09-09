@@ -29,6 +29,7 @@ import timelineItemState from '@salesforce/messageChannel/TimelineItemState__c';
 // timeline refresh from external
 //import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
 import getTaskClosedStatus from '@salesforce/apex/TaskUtils.getTaskClosedStatus';
+import getUserPreferences from '@salesforce/apex/TimelineUserPreference.getUserPreferences';
 
 export default class ActivityTimeline extends LightningElement {
     @api recordId;

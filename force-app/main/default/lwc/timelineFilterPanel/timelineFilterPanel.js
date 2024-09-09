@@ -13,10 +13,13 @@ import All_Types from '@salesforce/label/c.All_Types';
 import Filters from '@salesforce/label/c.Filters';
 import Expand_All from '@salesforce/label/c.Expand_All';
 import Collapse_All from '@salesforce/label/c.Collapse_All';
+import saveUserPreference from '@salesforce/apex/TimelineUserPreference.saveUserPreference';
+import deleteUserPreference from '@salesforce/apex/TimelineUserPreference.deleteUserPreference';
 
 export default class TimelineFilterPanel extends LightningElement {
     @track showFilter=false;
     @track dateFilterSelection="all_time";
+    @api objectName;
     @api objectFilters;
     @api availableObjects;
     @track expandAll=false;
@@ -98,6 +101,34 @@ export default class TimelineFilterPanel extends LightningElement {
     }
 
     applyFilters(){
+        if (this.dateFilterSelection == 'all_time' && this.objectFilters.length == this.availableObjects.length) {
+            // No active filter so delete filter from the Timeline User Preference (if present)
+            deleteUserPreference({ type: 'Filter', key: this.objectName })
+            .then(() => {
+                console.log('User preference deleted');
+            })
+            .catch(error => {
+                console.error('Error deleting user preference:', error);
+            });
+        } else {
+            // Save filter as a Timeline User Preference
+            // Combine the filter variables into an object
+            const dataToSerialize = {
+                dateFilterSelection: this.dateFilterSelection,
+                objectFilters: this.objectFilters
+            };
+            // Serialize the object to a JSON string
+            const jsonString = JSON.stringify(dataToSerialize);
+            // Save serialized filter in the Timeline User Preference
+            saveUserPreference({ type: 'Filter', key: this.objectName, value: jsonString })
+            .then(() => {
+                console.log('User preference saved');
+            })
+            .catch(error => {
+                console.error('Error saving user preference:', error);
+            });
+        }   
+
         this.expandAll=false;
         this.showFilter=false;
         const filterChangeEvent = new CustomEvent('change', {
@@ -107,8 +138,5 @@ export default class TimelineFilterPanel extends LightningElement {
             }
         });
         this.dispatchEvent(filterChangeEvent);
-
     }
-
-    
 }

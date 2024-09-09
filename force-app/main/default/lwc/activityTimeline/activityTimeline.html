@@ -32,7 +32,7 @@
                     <template if:false={showActions}>
                         <!-- show filters next to header float right -->
                         <div style="float:right">
-                            <c-timeline-filter-panel object-filters={filteredObjects} available-objects={availableObjects}
+                            <c-timeline-filter-panel object-name={objectName} object-filters={filteredObjects} available-objects={availableObjects}
                             onchange={handleFilterChange} onexpandcollapse={handleExpandCollapseEvent} show-expand-collapse={showExpandCollapse}></c-timeline-filter-panel>
                         </div>
                     </template>
@@ -43,7 +43,7 @@
                                 new-event-action={newEventAction} new-call-action={newCallAction} send-email-action={sendEmailAction}></c-generic-log-activities>
                             </div>
                             <div style="float:right">
-                                <c-timeline-filter-panel object-filters={filteredObjects} available-objects={availableObjects}
+                                <c-timeline-filter-panel object-name={objectName} object-filters={filteredObjects} available-objects={availableObjects}
                                 onchange={handleFilterChange} onexpandcollapse={handleExpandCollapseEvent} show-expand-collapse={showExpandCollapse}></c-timeline-filter-panel>
                             </div>
                         </div>
